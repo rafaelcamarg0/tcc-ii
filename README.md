@@ -17,6 +17,7 @@ Ambiente técnico do TCC de Rafael de Camargo da Silva.
 3. Verificar: docker compose ps.
 4. Testar a base: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/002_TESTE_BASE_TCC.sql.
 5. Testar a R01: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/004_TESTE_R01.sql.
+6. Testar o gerador: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/006_TESTE_GERADOR.sql.
 
 A senha local está em .env, arquivo ignorado pelo Git.
 

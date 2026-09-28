@@ -11,6 +11,8 @@ services:
       - tcc_pld_data:/var/lib/postgresql/data
       - ./sql/001_BASE_TCC.sql:/docker-entrypoint-initdb.d/001_BASE_TCC.sql:ro
       - ./sql/003_REGRA_R01.sql:/docker-entrypoint-initdb.d/003_REGRA_R01.sql:ro
+      - ./sql/005_GERADOR_BASE_SINTETICA.sql:/docker-entrypoint-initdb.d/005_GERADOR_BASE_SINTETICA.sql:ro
+      - ./sql:/sql:ro
       - ./tests:/tests:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
