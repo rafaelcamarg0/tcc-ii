@@ -25,6 +25,12 @@ Ambiente técnico do TCC de Rafael de Camargo da Silva.
 
 A senha local está em .env, arquivo ignorado pelo Git.
 
+## Execucao no Windows
+
+Use o atalho **Iniciar TCC PLD** na Área de Trabalho. Ele inicia o Docker Desktop quando necessário, aguarda o serviço e executa docker compose up -d.
+
+O atalho chama scripts/iniciar_ambiente.bat, que também pode ser executado diretamente ou por acesso remoto.
+
 ## Estrutura
 
 - sql/: esquema e mecanismos do banco.
