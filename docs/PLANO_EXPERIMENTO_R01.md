@@ -67,7 +67,7 @@ Mediana e dispersão devem acompanhar os tempos. Média isolada não será usada
 1. Validar novamente testes estruturais e C01-C12.
 2. Gerar base negativa controlada.
 3. Confirmar ausência de alertas na base negativa.
-4. Injetar cenários positivos em contas exclusivas.
+4. Injetar casos negativos próximos ao limiar e cenários positivos em contas exclusivas.
 5. Executar aquecimento.
 6. Executar repetições medidas.
 7. Conferir alertas e evidências a cada repetição.

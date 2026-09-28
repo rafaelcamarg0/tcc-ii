@@ -13,6 +13,7 @@ services:
       - ./sql/003_REGRA_R01.sql:/docker-entrypoint-initdb.d/003_REGRA_R01.sql:ro
       - ./sql/005_GERADOR_BASE_SINTETICA.sql:/docker-entrypoint-initdb.d/005_GERADOR_BASE_SINTETICA.sql:ro
       - ./sql/008_CENARIOS_CONTROLADOS_R01.sql:/docker-entrypoint-initdb.d/008_CENARIOS_CONTROLADOS_R01.sql:ro
+      - ./sql/013_CENARIOS_NEGATIVOS_R01.sql:/docker-entrypoint-initdb.d/013_CENARIOS_NEGATIVOS_R01.sql:ro
       - ./sql:/sql:ro
       - ./tests:/tests:ro
     healthcheck:

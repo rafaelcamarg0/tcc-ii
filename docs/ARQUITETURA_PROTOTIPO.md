@@ -31,7 +31,7 @@ Os scripts 001, 003, 005 e 008 inicializam uma base nova em ordem. Alterar esses
 | Execução | Registrar início, conclusão e identificador informado |
 | Alertas e evidências | Persistir ocorrências e os movimentos que as sustentam |
 | Gerador sintético | Produzir carga reproduzível sem dados reais |
-| Cenários controlados | Criar ground truth restrito ao padrão da R01 |
+| Cenários controlados | Criar ground truth positivo e negativo restrito à lógica da R01 |
 | Testes e benchmarks | Verificar comportamento e medir tempos controlados |
 ## Modelo de dados
 
@@ -45,6 +45,8 @@ erDiagram
     ALERTA ||--o{ EVIDENCIA_ALERTA : agrega
     TRANSACAO ||--o{ EVIDENCIA_ALERTA : fundamenta
     BASE_SINTETICA ||--o{ CENARIO_R01 : identifica
+    BASE_SINTETICA ||--o{ CENARIO_NEGATIVO_R01 : identifica
+    CLIENTE ||--o{ CENARIO_NEGATIVO_R01 : agrupa
     CONTA ||--o{ CENARIO_R01 : isola
     TRANSACAO ||--o{ CENARIO_R01 : referencia
 ~~~
@@ -89,9 +91,10 @@ A versão protege a interpretação histórica: a mesma combinação de código 
 
 1. O gerador cria clientes, contas e transações determinísticas a partir de uma semente.
 2. A base de fundo é executada isoladamente e deve produzir zero alertas no cenário controlado atual.
-3. O injetor cria contas exclusivas com cinco saídas consecutivas e registra a referência esperada.
-4. A R01 é executada e as contagens de alertas e evidências são comparadas ao ground truth construído.
-5. Benchmarks repetem o procedimento com aquecimento, validações e resumo por mediana e dispersão.
+3. O injetor positivo cria contas exclusivas com cinco saídas consecutivas e registra a referência esperada.
+4. O injetor negativo cria casos abaixo do limiar, fora da janela, com direção mista e divididos entre contas.
+5. A R01 é executada e as contagens de alertas e evidências são comparadas ao ground truth construído.
+6. Benchmarks repetem o procedimento com aquecimento, validações e resumo por mediana e dispersão.
 
 Esse ground truth comprova apenas que a implementação reconhece o padrão definido. Ele não mede recall de lavagem de dinheiro real.
 ## Decisões e propriedades atuais
@@ -120,6 +123,7 @@ Esse ground truth comprova apenas que a implementação reconhece o padrão defi
 - sql/003_REGRA_R01.sql: processamento, alertas e evidências.
 - sql/005_GERADOR_BASE_SINTETICA.sql: geração reproduzível.
 - sql/008_CENARIOS_CONTROLADOS_R01.sql: cenários positivos construídos.
+- sql/013_CENARIOS_NEGATIVOS_R01.sql: cenários negativos próximos ao limiar.
 - tests/: validações funcionais e experimentos.
 - resultados/: registros interpretados das execuções.
 - docs/PLANO_EXPERIMENTO_R01.md: protocolo proposto e ameaças à validade.
