@@ -29,4 +29,10 @@ A senha local está em .env, arquivo ignorado pelo Git.
 
 - sql/: esquema e mecanismos do banco.
 - tests/: testes funcionais e cenários sintéticos.
-- docs/: especificações e decisões metodológicas.
+- docs/: especificações, arquitetura e decisões metodológicas.
+
+## Documentação principal
+
+- [docs/ARQUITETURA_PROTOTIPO.md](docs/ARQUITETURA_PROTOTIPO.md): componentes, modelo de dados, fluxos e lacunas.
+- [docs/R01_ESPECIFICACAO.md](docs/R01_ESPECIFICACAO.md): definição funcional da primeira regra.
+- [docs/PLANO_EXPERIMENTO_R01.md](docs/PLANO_EXPERIMENTO_R01.md): protocolo de avaliação e ameaças à validade.
