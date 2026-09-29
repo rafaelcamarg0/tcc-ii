@@ -19,7 +19,7 @@ flowchart TD
 
 O Docker Desktop executa um contêiner PostgreSQL e publica a porta 5432 somente na interface local 127.0.0.1. Os diretórios sql/ e tests/ são montados como somente leitura. O volume nomeado tcc_pld_data preserva o banco entre reinicializações.
 
-Os scripts 001, 003, 005 e 008 inicializam uma base nova em ordem. Alterar esses arquivos não migra automaticamente um volume já criado; mudanças posteriores precisam ser aplicadas explicitamente ou em uma base nova.
+Os scripts 001, 003, 005, 008, 013 e 021 inicializam uma base nova em ordem. Alterar esses arquivos não migra automaticamente um volume já criado; mudanças posteriores precisam ser aplicadas explicitamente ou em uma base nova.
 
 ## Componentes lógicos
 
@@ -30,6 +30,7 @@ Os scripts 001, 003, 005 e 008 inicializam uma base nova em ordem. Alterar esses
 | Catálogo de regras | Versionar descrição e parâmetros da R01 |
 | Execução | Registrar início, conclusão ou falha, identificador, regra, versão, parâmetros e erro técnico |
 | Alertas e evidências | Persistir ocorrências e os movimentos que as sustentam |
+| Consulta de apoio | Reconstruir regra, execução, referência e evidências para revisão humana |
 | Gerador sintético | Produzir carga reproduzível sem dados reais |
 | Cenários controlados | Criar ground truth positivo e negativo restrito à lógica da R01 |
 | Testes e benchmarks | Verificar comportamento e medir tempos controlados |
@@ -134,7 +135,9 @@ Esse ground truth comprova apenas que a implementação reconhece o padrão defi
 - sql/015_REGISTRO_FALHA_EXECUCAO.sql: migração idempotente para registro de falhas.
 - sql/017_ISOLAMENTO_BASE_TRANSACAO.sql: migração idempotente para associação das transações à base.
 - sql/019_RASTREABILIDADE_EXECUCAO.sql: migração para regra, versão e parâmetros na execução.
+- sql/021_CONSULTA_ALERTAS.sql: view de reconstrução legível dos alertas.
 - tests/020_TESTE_VALIDACOES_EXECUCAO_R01.sql: entradas inválidas e rastreabilidade sem alertas.
+- tests/022_TESTE_CONSULTA_ALERTAS.sql: validação da consulta de apoio.
 - tests/: demais validações funcionais e experimentos, incluindo falha controlada e isolamento entre bases.
 - resultados/: registros interpretados das execuções.
 - docs/PLANO_EXPERIMENTO_R01.md: protocolo proposto e ameaças à validade.

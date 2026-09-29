@@ -26,6 +26,7 @@ Ambiente técnico do TCC de Rafael de Camargo da Silva.
 12. Testar registro de falha: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/016_TESTE_REGISTRO_FALHA_R01.sql.
 13. Testar isolamento entre bases: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/018_TESTE_ISOLAMENTO_BASE_R01.sql.
 14. Testar entradas inválidas e rastreabilidade da execução: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/020_TESTE_VALIDACOES_EXECUCAO_R01.sql.
+15. Testar a consulta explicável: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/022_TESTE_CONSULTA_ALERTAS.sql.
 
 A senha local está em .env, arquivo ignorado pelo Git.
 
@@ -33,7 +34,7 @@ A senha local está em .env, arquivo ignorado pelo Git.
 
 Use o atalho **Iniciar TCC PLD** na Área de Trabalho. Ele inicia o Docker Desktop quando necessário, aguarda o serviço e executa docker compose up -d.
 
-O atalho chama scripts/iniciar_ambiente.bat, que também pode ser executado diretamente ou por acesso remoto.
+O atalho chama scripts/iniciar_ambiente.bat, que também pode ser executado diretamente ou por acesso remoto. Para revisão externa, scripts/validar_projeto.bat executa toda a suíte funcional e scripts/executar_benchmarks.bat repete os três experimentos.
 
 ## Estrutura
 
