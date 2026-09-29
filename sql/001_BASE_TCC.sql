@@ -51,7 +51,17 @@ CREATE TABLE tcc_pld.execucao_monitoramento (
     iniciada_em timestamptz NOT NULL DEFAULT clock_timestamp(),
     concluida_em timestamptz,
     estado text NOT NULL CHECK (estado IN ('EM_EXECUCAO', 'CONCLUIDA', 'FALHOU')),
-    CHECK (concluida_em IS NULL OR concluida_em >= iniciada_em)
+    erro_codigo text,
+    erro_mensagem text,
+    CHECK (concluida_em IS NULL OR concluida_em >= iniciada_em),
+    CONSTRAINT execucao_estado_detalhes_check CHECK (
+        (estado = 'EM_EXECUCAO' AND concluida_em IS NULL
+            AND erro_codigo IS NULL AND erro_mensagem IS NULL)
+        OR (estado = 'CONCLUIDA' AND concluida_em IS NOT NULL
+            AND erro_codigo IS NULL AND erro_mensagem IS NULL)
+        OR (estado = 'FALHOU' AND concluida_em IS NOT NULL
+            AND erro_codigo IS NOT NULL AND erro_mensagem IS NOT NULL)
+    )
 );
 -- A granularidade do alerta proposta e uma referencia por regra/versao.
 CREATE TABLE tcc_pld.alerta (

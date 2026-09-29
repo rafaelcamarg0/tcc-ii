@@ -12,6 +12,8 @@ AS $$
 DECLARE
     v_execucao_id bigint;
     v_parametros jsonb;
+    v_erro_codigo text;
+    v_erro_mensagem text;
 BEGIN
     IF p_identificador_base IS NULL OR btrim(p_identificador_base) = '' THEN
         RAISE EXCEPTION 'O identificador da base e obrigatorio';
@@ -62,6 +64,7 @@ BEGIN
         (p_identificador_base, 'EM_EXECUCAO')
     RETURNING execucao_id INTO v_execucao_id;
 
+    BEGIN
     WITH candidatas AS (
         SELECT
             referencia.transacao_id AS transacao_referencia_id,
@@ -123,6 +126,22 @@ BEGIN
     SET estado = 'CONCLUIDA',
         concluida_em = clock_timestamp()
     WHERE execucao_id = v_execucao_id;
+    EXCEPTION WHEN OTHERS THEN
+        GET STACKED DIAGNOSTICS
+            v_erro_codigo = RETURNED_SQLSTATE,
+            v_erro_mensagem = MESSAGE_TEXT;
+
+        UPDATE tcc_pld.execucao_monitoramento
+        SET estado = 'FALHOU',
+            concluida_em = clock_timestamp(),
+            erro_codigo = v_erro_codigo,
+            erro_mensagem = v_erro_mensagem
+        WHERE execucao_id = v_execucao_id;
+
+        RAISE WARNING
+            'Execucao R01/% falhou [%]: %',
+            v_execucao_id, v_erro_codigo, v_erro_mensagem;
+    END;
 END;
 $$;
 

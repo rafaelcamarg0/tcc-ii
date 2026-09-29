@@ -22,6 +22,8 @@ Cada alerta deve preservar regra, versão, execução, transação de referênci
 
 Reexecutar a mesma versão sobre a mesma base não deve criar alertas duplicados.
 
+Erros ocorridos após a abertura da execução devem reverter alertas e evidências parciais, marcar a execução como FALHOU e preservar o SQLSTATE e a mensagem. Como a exceção é convertida em aviso para que o registro sobreviva, o chamador deve verificar o estado da execução.
+
 ## Limitações desta versão
 
 Janelas sobrepostas podem gerar alertas distintos. Transações simultâneas podem gerar vários alertas. Não há agregação entre contas de um mesmo cliente nem tratamento de dados tardios.
