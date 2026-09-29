@@ -138,6 +138,8 @@ Esse ground truth comprova apenas que a implementação reconhece o padrão defi
 - sql/021_CONSULTA_ALERTAS.sql: view de reconstrução legível dos alertas.
 - tests/020_TESTE_VALIDACOES_EXECUCAO_R01.sql: entradas inválidas e rastreabilidade sem alertas.
 - tests/022_TESTE_CONSULTA_ALERTAS.sql: validação da consulta de apoio.
+- tests/023_DEMONSTRACAO_ORIENTACAO.sql: narrativa curta e transacional para apresentação do fluxo completo.
+- scripts/demonstrar_prototipo.bat: inicialização e execução em dois cliques da demonstração guiada.
 - tests/: demais validações funcionais e experimentos, incluindo falha controlada e isolamento entre bases.
 - resultados/: registros interpretados das execuções.
 - docs/PLANO_EXPERIMENTO_R01.md: protocolo proposto e ameaças à validade.

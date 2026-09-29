@@ -34,7 +34,7 @@ A senha local está em .env, arquivo ignorado pelo Git.
 
 Use o atalho **Iniciar TCC PLD** na Área de Trabalho. Ele inicia o Docker Desktop quando necessário, aguarda o serviço e executa docker compose up -d.
 
-O atalho chama scripts/iniciar_ambiente.bat, que também pode ser executado diretamente ou por acesso remoto. Para revisão externa, scripts/validar_projeto.bat executa toda a suíte funcional e scripts/executar_benchmarks.bat repete os três experimentos.
+O atalho chama scripts/iniciar_ambiente.bat, que também pode ser executado diretamente ou por acesso remoto. Para uma apresentação de 3 a 5 minutos, use scripts/demonstrar_prototipo.bat; ele cria uma base sintética temporária, mostra um caso sem alerta, injeta um caso positivo, exibe o alerta explicado e desfaz tudo ao final. Para revisão externa, scripts/validar_projeto.bat executa toda a suíte funcional e scripts/executar_benchmarks.bat repete os três experimentos.
 
 ## Estrutura
 
