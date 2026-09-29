@@ -95,7 +95,7 @@ Um volume maior só será incluído se acrescentar evidência útil e não compr
 - distribuição sintética simplificada;
 - interferência de cache e processos do notebook;
 - execução em um único ambiente;
-- ordem fixa das condições;
+- interferência residual apesar da alternância da ordem das condições;
 - parâmetros ainda sem justificativa empírica;
 - comparação restrita a uma regra e uma arquitetura.
 

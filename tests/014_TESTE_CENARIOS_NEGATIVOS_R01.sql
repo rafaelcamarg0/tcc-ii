@@ -57,9 +57,11 @@ BEGIN
             v_transacoes;
     END IF;
 
-    IF v_alertas <> 0 THEN
+    IF v_alertas <> 0
+       OR (SELECT count(*) FROM tcc_pld.execucao_monitoramento
+           WHERE estado = 'CONCLUIDA') <> 1 THEN
         RAISE EXCEPTION
-            'Cenarios negativos isolados geraram % alertas',
+            'Execucao negativa falhou ou gerou % alertas',
             v_alertas;
     END IF;
 
@@ -118,6 +120,10 @@ BEGIN
         RAISE EXCEPTION
             'Foram gerados % alertas fora dos positivos construidos',
             v_alertas_fora_positivos;
+    END IF;
+    IF (SELECT count(*) FROM tcc_pld.execucao_monitoramento
+        WHERE estado = 'CONCLUIDA') <> 1 THEN
+        RAISE EXCEPTION 'Execucao da mistura nao foi concluida';
     END IF;
 
     RAISE NOTICE

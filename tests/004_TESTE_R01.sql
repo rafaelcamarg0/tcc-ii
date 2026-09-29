@@ -41,6 +41,19 @@ BEGIN
 END;
 $$;
 
+CREATE PROCEDURE pg_temp.exigir_conclusao(p_quantidade integer DEFAULT 1)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF (SELECT count(*) FROM tcc_pld.execucao_monitoramento)
+            <> p_quantidade
+       OR (SELECT count(*) FROM tcc_pld.execucao_monitoramento
+           WHERE estado = 'CONCLUIDA') <> p_quantidade THEN
+        RAISE EXCEPTION 'Execucao da R01 nao foi concluida';
+    END IF;
+END;
+$$;
+
 -- C01: quatro saidas nao atingem o limiar.
 DO $$
 DECLARE v_conta bigint;
@@ -53,7 +66,8 @@ BEGIN
            TIMESTAMPTZ '2026-09-01 12:00:00-03' + i * interval '1 minute',
            'SAIDA', 100
     FROM generate_series(0, 3) AS g(i);
-    CALL tcc_pld.executar_r01('C01');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 0 THEN
         RAISE EXCEPTION 'C01 falhou';
     END IF;
@@ -74,7 +88,8 @@ BEGIN
            'SAIDA', 100
     FROM generate_series(0, 4) AS g(i);
 
-    CALL tcc_pld.executar_r01('C02');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 1
        OR (SELECT (resultado_observado->>'quantidade')::integer
            FROM tcc_pld.alerta) <> 5 THEN
@@ -97,7 +112,8 @@ BEGIN
            'SAIDA', 100
     FROM generate_series(0, 5) AS g(i);
 
-    CALL tcc_pld.executar_r01('C03');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 2 THEN
         RAISE EXCEPTION 'C03 falhou';
     END IF;
@@ -122,7 +138,8 @@ BEGIN
         (TIMESTAMPTZ '2026-09-01 12:10:00-03')
     ) AS v(instante);
 
-    CALL tcc_pld.executar_r01('C04');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 0 THEN
         RAISE EXCEPTION 'C04 falhou';
     END IF;
@@ -147,7 +164,8 @@ BEGIN
         (TIMESTAMPTZ '2026-09-01 12:10:00-03')
     ) AS v(instante);
 
-    CALL tcc_pld.executar_r01('C05');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 1 THEN
         RAISE EXCEPTION 'C05 falhou';
     END IF;
@@ -172,7 +190,8 @@ BEGIN
     VALUES
         ('C06_E', v_conta, TIMESTAMPTZ '2026-09-01 12:04:00-03', 'ENTRADA', 100);
 
-    CALL tcc_pld.executar_r01('C06');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 0 THEN
         RAISE EXCEPTION 'C06 falhou';
     END IF;
@@ -201,7 +220,8 @@ BEGIN
            'SAIDA', 100
     FROM generate_series(0, 1) AS g(i);
 
-    CALL tcc_pld.executar_r01('C07');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 0 THEN
         RAISE EXCEPTION 'C07 falhou';
     END IF;
@@ -221,7 +241,8 @@ BEGIN
            TIMESTAMPTZ '2026-09-01 12:00:00-03', 'SAIDA', 100
     FROM generate_series(1, 5) AS g(i);
 
-    CALL tcc_pld.executar_r01('C08');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 5 THEN
         RAISE EXCEPTION 'C08 falhou';
     END IF;
@@ -242,7 +263,8 @@ BEGIN
            'SAIDA', 100
     FROM generate_series(4, 0, -1) AS g(i);
 
-    CALL tcc_pld.executar_r01('C09');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 1 THEN
         RAISE EXCEPTION 'C09 falhou';
     END IF;
@@ -263,8 +285,9 @@ BEGIN
            'SAIDA', 100
     FROM generate_series(0, 4) AS g(i);
 
-    CALL tcc_pld.executar_r01('C10_PRIMEIRA');
-    CALL tcc_pld.executar_r01('C10_SEGUNDA');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao(2);
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 1
        OR (SELECT count(*) FROM tcc_pld.execucao_monitoramento) <> 2 THEN
         RAISE EXCEPTION 'C10 falhou';
@@ -286,7 +309,8 @@ BEGIN
            'SAIDA', 100
     FROM generate_series(0, 4) AS g(i);
 
-    CALL tcc_pld.executar_r01('C11');
+    CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+    CALL pg_temp.exigir_conclusao();
     IF (SELECT count(*) FROM tcc_pld.evidencia_alerta) <> 5
        OR NOT EXISTS (
            SELECT 1 FROM tcc_pld.alerta

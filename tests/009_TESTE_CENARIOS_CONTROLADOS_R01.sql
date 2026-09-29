@@ -13,9 +13,16 @@ CALL tcc_pld.executar_r01('TESTE_CONTROLADO');
 
 DO $$
 BEGIN
-    IF (SELECT count(*) FROM tcc_pld.alerta) <> 0 THEN
+    IF (SELECT count(*) FROM tcc_pld.alerta) <> 0
+       OR NOT EXISTS (
+            SELECT 1 FROM tcc_pld.execucao_monitoramento
+            WHERE identificador_base = 'TESTE_CONTROLADO'
+              AND estado = 'CONCLUIDA'
+              AND regra_codigo = 'R01'
+              AND regra_versao = 1
+       ) THEN
         RAISE EXCEPTION
-            'A base de fundo gerou alertas antes das injecoes';
+            'A base de fundo falhou ou gerou alertas antes das injecoes';
     END IF;
     RAISE NOTICE 'BASE NEGATIVA PASSOU: zero alertas';
 END;
@@ -75,6 +82,10 @@ BEGIN
     END IF;
     IF v_evidencias <> 50 THEN
         RAISE EXCEPTION 'Evidencias: 50 esperadas, % obtidas', v_evidencias;
+    END IF;
+    IF (SELECT count(*) FROM tcc_pld.execucao_monitoramento
+        WHERE estado = 'CONCLUIDA') <> 2 THEN
+        RAISE EXCEPTION 'Uma das execucoes controladas nao foi concluida';
     END IF;
 
     RAISE NOTICE

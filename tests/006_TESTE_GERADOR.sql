@@ -7,7 +7,21 @@ DECLARE
     v_hash_primeira text;
     v_hash_segunda text;
     v_repeticao_bloqueada boolean := false;
+    v_reservado_bloqueado boolean := false;
 BEGIN
+    BEGIN
+        CALL tcc_pld.gerar_base_sintetica(
+            'LEGADO_SEM_BASE', 1, 1, 12345
+        );
+    EXCEPTION WHEN OTHERS THEN
+        v_reservado_bloqueado := SQLERRM =
+            'O identificador LEGADO_SEM_BASE e reservado';
+    END;
+
+    IF NOT v_reservado_bloqueado THEN
+        RAISE EXCEPTION 'Identificador reservado foi aceito pelo gerador';
+    END IF;
+
     CALL tcc_pld.gerar_base_sintetica(
         'TESTE_GERADOR',
         10,

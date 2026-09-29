@@ -26,6 +26,8 @@ CALL tcc_pld.executar_r01('ISOLADA_A');
 DO $$
 BEGIN
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 1
+       OR (SELECT count(*) FROM tcc_pld.execucao_monitoramento
+           WHERE estado = 'CONCLUIDA') <> 1
        OR NOT EXISTS (
             SELECT 1
             FROM tcc_pld.alerta AS a
@@ -44,6 +46,8 @@ CALL tcc_pld.executar_r01('ISOLADA_B');
 DO $$
 BEGIN
     IF (SELECT count(*) FROM tcc_pld.alerta) <> 2
+       OR (SELECT count(*) FROM tcc_pld.execucao_monitoramento
+           WHERE estado = 'CONCLUIDA') <> 2
        OR (SELECT count(DISTINCT b.identificador)
            FROM tcc_pld.alerta AS a
            JOIN tcc_pld.transacao AS t

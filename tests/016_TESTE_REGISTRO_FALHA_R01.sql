@@ -42,7 +42,7 @@ CREATE TRIGGER teste_impedir_alerta
 BEFORE INSERT ON tcc_pld.alerta
 FOR EACH ROW EXECUTE FUNCTION pg_temp.impedir_alerta();
 
-CALL tcc_pld.executar_r01('TESTE_FALHA_CONTROLADA');
+CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
 
 DROP TRIGGER teste_impedir_alerta ON tcc_pld.alerta;
 
@@ -51,7 +51,10 @@ BEGIN
     IF NOT EXISTS (
         SELECT 1
         FROM tcc_pld.execucao_monitoramento
-        WHERE identificador_base = 'TESTE_FALHA_CONTROLADA'
+        WHERE identificador_base = 'LEGADO_SEM_BASE'
+          AND regra_codigo = 'R01'
+          AND regra_versao = 1
+          AND parametros_utilizados @> '{"quantidade_minima": 5}'::jsonb
           AND estado = 'FALHOU'
           AND concluida_em IS NOT NULL
           AND erro_codigo = 'P0001'

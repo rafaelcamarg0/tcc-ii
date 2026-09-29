@@ -50,12 +50,19 @@ CREATE TABLE tcc_pld.regra (
 CREATE TABLE tcc_pld.execucao_monitoramento (
     execucao_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     identificador_base text NOT NULL,
+    regra_codigo text NOT NULL,
+    regra_versao integer NOT NULL CHECK (regra_versao > 0),
+    parametros_utilizados jsonb NOT NULL
+        CHECK (jsonb_typeof(parametros_utilizados) = 'object'),
     iniciada_em timestamptz NOT NULL DEFAULT clock_timestamp(),
     concluida_em timestamptz,
     estado text NOT NULL CHECK (estado IN ('EM_EXECUCAO', 'CONCLUIDA', 'FALHOU')),
     erro_codigo text,
     erro_mensagem text,
     CHECK (concluida_em IS NULL OR concluida_em >= iniciada_em),
+    CONSTRAINT execucao_regra_fk
+        FOREIGN KEY (regra_codigo, regra_versao)
+        REFERENCES tcc_pld.regra (codigo, versao),
     CONSTRAINT execucao_estado_detalhes_check CHECK (
         (estado = 'EM_EXECUCAO' AND concluida_em IS NULL
             AND erro_codigo IS NULL AND erro_mensagem IS NULL)

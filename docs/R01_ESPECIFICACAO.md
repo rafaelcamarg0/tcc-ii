@@ -13,13 +13,14 @@ Parâmetros iniciais de depuração:
 - unidade de análise = conta;
 - somente saídas;
 - processamento em lote sobre base sintética estável;
-- filtro por base_id quando o identificador corresponde a uma base cadastrada.
+- identificador obrigatório de uma base sintética cadastrada;
+- uso de LEGADO_SEM_BASE apenas para testes manuais sobre registros antigos sem base_id.
 
-Esses valores não são limites legais nem parâmetros internos de instituição financeira. Servem para verificar o funcionamento do mecanismo.
+Esses valores não são limites legais nem parâmetros internos de instituição financeira. Servem para verificar o funcionamento do mecanismo. A quantidade mínima, a janela e a versão são obrigatórias e devem ser positivas. Identificadores de base inexistentes são rejeitados antes da abertura da execução.
 
 ## Rastreabilidade exigida
 
-Cada alerta deve preservar regra, versão, execução, transação de referência, contagem observada, parâmetros utilizados e todas as transações que justificaram o disparo.
+Cada execução deve preservar identificador da base, regra, versão e parâmetros utilizados, inclusive quando não produz alertas ou termina com falha. Cada alerta deve preservar execução, transação de referência, contagem observada e todas as transações que justificaram o disparo.
 
 Reexecutar a mesma versão sobre a mesma base não deve criar alertas duplicados.
 

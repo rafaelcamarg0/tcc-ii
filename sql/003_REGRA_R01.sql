@@ -19,19 +19,29 @@ BEGIN
     IF p_identificador_base IS NULL OR btrim(p_identificador_base) = '' THEN
         RAISE EXCEPTION 'O identificador da base e obrigatorio';
     END IF;
-    IF p_quantidade_minima < 2 THEN
+    IF p_quantidade_minima IS NULL OR p_quantidade_minima < 2 THEN
         RAISE EXCEPTION 'A quantidade minima deve ser maior ou igual a 2';
     END IF;
-    IF p_janela <= interval '0 seconds' THEN
+    IF p_janela IS NULL OR p_janela <= interval '0 seconds' THEN
         RAISE EXCEPTION 'A janela deve ser positiva';
     END IF;
-    IF p_versao < 1 THEN
+    IF p_versao IS NULL OR p_versao < 1 THEN
         RAISE EXCEPTION 'A versao deve ser positiva';
     END IF;
 
-    SELECT base_id INTO v_base_id
-    FROM tcc_pld.base_sintetica
-    WHERE identificador = p_identificador_base;
+    IF p_identificador_base = 'LEGADO_SEM_BASE' THEN
+        v_base_id := NULL;
+    ELSE
+        SELECT base_id INTO v_base_id
+        FROM tcc_pld.base_sintetica
+        WHERE identificador = p_identificador_base;
+
+        IF NOT FOUND THEN
+            RAISE EXCEPTION
+                'Base sintetica % nao encontrada',
+                p_identificador_base;
+        END IF;
+    END IF;
 
     v_parametros := jsonb_build_object(
         'quantidade_minima', p_quantidade_minima,
@@ -63,10 +73,20 @@ BEGIN
             p_versao;
     END IF;
 
-    INSERT INTO tcc_pld.execucao_monitoramento
-        (identificador_base, estado)
-    VALUES
-        (p_identificador_base, 'EM_EXECUCAO')
+    INSERT INTO tcc_pld.execucao_monitoramento (
+        identificador_base,
+        regra_codigo,
+        regra_versao,
+        parametros_utilizados,
+        estado
+    )
+    VALUES (
+        p_identificador_base,
+        'R01',
+        p_versao,
+        v_parametros,
+        'EM_EXECUCAO'
+    )
     RETURNING execucao_id INTO v_execucao_id;
 
     BEGIN

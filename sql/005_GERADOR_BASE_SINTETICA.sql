@@ -34,6 +34,9 @@ BEGIN
     IF p_identificador IS NULL OR btrim(p_identificador) = '' THEN
         RAISE EXCEPTION 'O identificador da base e obrigatorio';
     END IF;
+    IF p_identificador = 'LEGADO_SEM_BASE' THEN
+        RAISE EXCEPTION 'O identificador LEGADO_SEM_BASE e reservado';
+    END IF;
     IF p_quantidade_clientes < 1 THEN
         RAISE EXCEPTION 'A quantidade de clientes deve ser positiva';
     END IF;
