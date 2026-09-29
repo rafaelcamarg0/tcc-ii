@@ -9,7 +9,7 @@ CALL tcc_pld.gerar_base_sintetica(
     20260928
 );
 
-CALL tcc_pld.executar_r01('TESTE_CONTROLADO_ANTES');
+CALL tcc_pld.executar_r01('TESTE_CONTROLADO');
 
 DO $$
 BEGIN
@@ -26,7 +26,7 @@ CALL tcc_pld.injetar_cenarios_r01(
     10,
     5
 );
-CALL tcc_pld.executar_r01('TESTE_CONTROLADO_DEPOIS');
+CALL tcc_pld.executar_r01('TESTE_CONTROLADO');
 
 DO $$
 DECLARE

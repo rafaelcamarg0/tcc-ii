@@ -27,6 +27,8 @@ CREATE TABLE tcc_pld.conta (
 CREATE TABLE tcc_pld.transacao (
     transacao_id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     codigo_sintetico text NOT NULL UNIQUE,
+    -- FK adicionada em 005, depois da criacao de base_sintetica.
+    base_id bigint,
     conta_id bigint NOT NULL REFERENCES tcc_pld.conta,
     instante_evento timestamptz NOT NULL,
     direcao text NOT NULL CHECK (direcao IN ('ENTRADA', 'SAIDA')),

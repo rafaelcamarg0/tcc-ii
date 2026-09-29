@@ -12,7 +12,8 @@ Parâmetros iniciais de depuração:
 - W = 10 minutos;
 - unidade de análise = conta;
 - somente saídas;
-- processamento em lote sobre base sintética estável.
+- processamento em lote sobre base sintética estável;
+- filtro por base_id quando o identificador corresponde a uma base cadastrada.
 
 Esses valores não são limites legais nem parâmetros internos de instituição financeira. Servem para verificar o funcionamento do mecanismo.
 

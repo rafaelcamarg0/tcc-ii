@@ -11,6 +11,7 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     v_execucao_id bigint;
+    v_base_id bigint;
     v_parametros jsonb;
     v_erro_codigo text;
     v_erro_mensagem text;
@@ -27,6 +28,10 @@ BEGIN
     IF p_versao < 1 THEN
         RAISE EXCEPTION 'A versao deve ser positiva';
     END IF;
+
+    SELECT base_id INTO v_base_id
+    FROM tcc_pld.base_sintetica
+    WHERE identificador = p_identificador_base;
 
     v_parametros := jsonb_build_object(
         'quantidade_minima', p_quantidade_minima,
@@ -73,10 +78,15 @@ BEGIN
         FROM tcc_pld.transacao AS referencia
         JOIN tcc_pld.transacao AS evidencia
           ON evidencia.conta_id = referencia.conta_id
+         AND evidencia.base_id IS NOT DISTINCT FROM referencia.base_id
          AND evidencia.direcao = 'SAIDA'
          AND evidencia.instante_evento > referencia.instante_evento - p_janela
          AND evidencia.instante_evento <= referencia.instante_evento
         WHERE referencia.direcao = 'SAIDA'
+          AND (
+              (v_base_id IS NULL AND referencia.base_id IS NULL)
+              OR referencia.base_id = v_base_id
+          )
         GROUP BY referencia.transacao_id, referencia.instante_evento
         HAVING count(evidencia.transacao_id) >= p_quantidade_minima
     )
@@ -114,11 +124,13 @@ BEGIN
       ON referencia.transacao_id = alerta.transacao_referencia_id
     JOIN tcc_pld.transacao AS evidencia
       ON evidencia.conta_id = referencia.conta_id
+     AND evidencia.base_id IS NOT DISTINCT FROM referencia.base_id
      AND evidencia.direcao = 'SAIDA'
      AND evidencia.instante_evento > referencia.instante_evento - p_janela
      AND evidencia.instante_evento <= referencia.instante_evento
     WHERE alerta.regra_codigo = 'R01'
       AND alerta.regra_versao = p_versao
+      AND alerta.execucao_id = v_execucao_id
       AND alerta.parametros_utilizados = v_parametros
     ON CONFLICT (alerta_id, transacao_id) DO NOTHING;
 

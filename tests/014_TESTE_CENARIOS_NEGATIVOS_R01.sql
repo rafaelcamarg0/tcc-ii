@@ -27,7 +27,7 @@ CALL tcc_pld.injetar_cenarios_negativos_r01(
     5
 );
 
-CALL tcc_pld.executar_r01('NEGATIVOS_ISOLADOS');
+CALL tcc_pld.executar_r01('TESTE_NEGATIVOS');
 DO $$
 DECLARE
     v_cenarios bigint;
@@ -81,7 +81,7 @@ CALL tcc_pld.injetar_cenarios_r01(
     5
 );
 
-CALL tcc_pld.executar_r01('NEGATIVOS_COM_POSITIVOS');
+CALL tcc_pld.executar_r01('TESTE_NEGATIVOS');
 
 DO $$
 DECLARE

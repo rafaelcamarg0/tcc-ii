@@ -1,5 +1,7 @@
 # Benchmark controlado repetido — 28/09/2026
 
+> Resultado histórico anterior ao isolamento por base. Para a versão atual do protótipo, usar BENCHMARK_APOS_ISOLAMENTO_2026-09-29.md.
+
 ## Procedimento
 
 Para cada volume foi executada uma repetição de aquecimento, descartada, seguida de cinco medições. A semente utilizada foi 20260928. Cada repetição começou com tabelas vazias e terminou dentro de uma transação revertida.

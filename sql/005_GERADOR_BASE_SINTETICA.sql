@@ -13,6 +13,11 @@ CREATE TABLE IF NOT EXISTS tcc_pld.base_sintetica (
     CHECK (periodo_fim > periodo_inicio)
 );
 
+ALTER TABLE tcc_pld.transacao
+    DROP CONSTRAINT IF EXISTS transacao_base_sintetica_fk,
+    ADD CONSTRAINT transacao_base_sintetica_fk
+        FOREIGN KEY (base_id) REFERENCES tcc_pld.base_sintetica (base_id);
+
 CREATE OR REPLACE PROCEDURE tcc_pld.gerar_base_sintetica(
     p_identificador text,
     p_quantidade_clientes integer,
@@ -23,6 +28,8 @@ CREATE OR REPLACE PROCEDURE tcc_pld.gerar_base_sintetica(
 )
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    v_base_id bigint;
 BEGIN
     IF p_identificador IS NULL OR btrim(p_identificador) = '' THEN
         RAISE EXCEPTION 'O identificador da base e obrigatorio';
@@ -52,7 +59,8 @@ BEGIN
         p_quantidade_transacoes,
         p_periodo_inicio,
         p_periodo_fim
-    );
+    )
+    RETURNING base_id INTO v_base_id;
 
     INSERT INTO tcc_pld.cliente (
         codigo_sintetico,
@@ -84,6 +92,7 @@ BEGIN
 
     INSERT INTO tcc_pld.transacao (
         codigo_sintetico,
+        base_id,
         conta_id,
         instante_evento,
         direcao,
@@ -91,6 +100,7 @@ BEGIN
     )
     SELECT
         p_identificador || '_TX_' || serie,
+        v_base_id,
         conta.conta_id,
         p_periodo_inicio
             + (

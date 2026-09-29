@@ -2,7 +2,7 @@
 
 **Data:** 28/09/2026
 
-**Status:** experimento de desenvolvimento; resultados não generalizáveis.
+**Status:** experimento histórico anterior ao isolamento por base; resultados não generalizáveis. Para a versão atual, usar BENCHMARK_APOS_ISOLAMENTO_2026-09-29.md.
 
 ## Ambiente
 

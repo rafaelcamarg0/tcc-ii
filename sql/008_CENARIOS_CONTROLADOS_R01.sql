@@ -29,6 +29,7 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     v_cenario integer;
+    v_base_id bigint;
     v_cliente_id bigint;
     v_conta_id bigint;
     v_referencia_id bigint;
@@ -40,6 +41,10 @@ BEGIN
     ) THEN
         RAISE EXCEPTION 'Base sintetica % nao encontrada', p_identificador_base;
     END IF;
+    SELECT base_id INTO STRICT v_base_id
+    FROM tcc_pld.base_sintetica
+    WHERE identificador = p_identificador_base;
+
     IF p_quantidade_cenarios < 1 THEN
         RAISE EXCEPTION 'A quantidade de cenarios deve ser positiva';
     END IF;
@@ -74,6 +79,7 @@ BEGIN
 
         INSERT INTO tcc_pld.transacao (
             codigo_sintetico,
+            base_id,
             conta_id,
             instante_evento,
             direcao,
@@ -81,6 +87,7 @@ BEGIN
         )
         SELECT
             v_codigo || '_TX_' || evento,
+            v_base_id,
             v_conta_id,
             p_inicio + (evento - 1) * interval '1 minute',
             'SAIDA',

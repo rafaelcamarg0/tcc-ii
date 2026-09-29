@@ -24,6 +24,7 @@ Ambiente técnico do TCC de Rafael de Camargo da Silva.
 10. Comparar impacto do índice: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/012_COMPARACAO_INDICE_R01.sql.
 11. Testar cenários negativos: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/014_TESTE_CENARIOS_NEGATIVOS_R01.sql.
 12. Testar registro de falha: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/016_TESTE_REGISTRO_FALHA_R01.sql.
+13. Testar isolamento entre bases: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/018_TESTE_ISOLAMENTO_BASE_R01.sql.
 
 A senha local está em .env, arquivo ignorado pelo Git.
 

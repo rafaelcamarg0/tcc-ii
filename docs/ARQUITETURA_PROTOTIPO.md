@@ -39,6 +39,7 @@ Os scripts 001, 003, 005 e 008 inicializam uma base nova em ordem. Alterar esses
 erDiagram
     CLIENTE ||--o{ CONTA : possui
     CONTA ||--o{ TRANSACAO : registra
+    BASE_SINTETICA ||--o{ TRANSACAO : delimita
     REGRA ||--o{ ALERTA : classifica
     EXECUCAO_MONITORAMENTO ||--o{ ALERTA : produz
     TRANSACAO ||--o{ ALERTA : referencia
@@ -71,7 +72,7 @@ sequenceDiagram
 Em INSERT, grava-se o estado posterior; em UPDATE, os estados anterior e posterior; em DELETE, o estado anterior. session_user identifica o usuário do banco, não necessariamente uma pessoa da aplicação.
 ## Fluxo da R01
 
-A procedure executar_r01 recebe identificador, quantidade mínima, janela e versão. Na configuração atual, procura saídas da mesma conta em (T - W, T]; com os padrões de desenvolvimento, são cinco saídas em dez minutos.
+A procedure executar_r01 recebe identificador da base, quantidade mínima, janela e versão. Quando o identificador corresponde a uma base sintética, somente as transações associadas a ela são processadas. Na configuração atual, procura saídas da mesma conta em (T - W, T]; com os padrões de desenvolvimento, são cinco saídas em dez minutos.
 
 ~~~mermaid
 flowchart TD
@@ -114,7 +115,7 @@ Esse ground truth comprova apenas que a implementação reconhece o padrão defi
 
 ## Lacunas arquiteturais conhecidas
 
-1. p_identificador_base identifica a execução, mas ainda não filtra as transações; os testes isolam bases com TRUNCATE.
+1. Registros legados ou testes manuais podem ter base_id nulo; quando o identificador informado não corresponde a uma base sintética, a R01 processa somente esse conjunto não associado.
 2. Como a falha é convertida em aviso para preservar o registro, o cliente precisa consultar o estado final da execução.
 3. Não há controle de acesso por papéis, segregação de funções ou trilha protegida contra alteração administrativa.
 4. Não há particionamento, retenção, arquivamento ou política de descarte.
@@ -130,7 +131,8 @@ Esse ground truth comprova apenas que a implementação reconhece o padrão defi
 - sql/005_GERADOR_BASE_SINTETICA.sql: geração reproduzível.
 - sql/008_CENARIOS_CONTROLADOS_R01.sql: cenários positivos construídos.
 - sql/013_CENARIOS_NEGATIVOS_R01.sql: cenários negativos próximos ao limiar.
-- sql/015_REGISTRO_FALHA_EXECUCAO.sql: migração idempotente para bases existentes.
-- tests/: validações funcionais e experimentos, incluindo falha controlada da R01.
+- sql/015_REGISTRO_FALHA_EXECUCAO.sql: migração idempotente para registro de falhas.
+- sql/017_ISOLAMENTO_BASE_TRANSACAO.sql: migração idempotente para associação das transações à base.
+- tests/: validações funcionais e experimentos, incluindo falha controlada e isolamento entre bases.
 - resultados/: registros interpretados das execuções.
 - docs/PLANO_EXPERIMENTO_R01.md: protocolo proposto e ameaças à validade.

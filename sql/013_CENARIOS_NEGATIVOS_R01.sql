@@ -29,6 +29,7 @@ LANGUAGE plpgsql
 AS $$
 DECLARE
     v_indice integer;
+    v_base_id bigint;
     v_tipo text;
     v_codigo text;
     v_cliente_id bigint;
@@ -45,6 +46,10 @@ BEGIN
             'Base sintetica % nao encontrada',
             p_identificador_base;
     END IF;
+
+    SELECT base_id INTO STRICT v_base_id
+    FROM tcc_pld.base_sintetica
+    WHERE identificador = p_identificador_base;
 
     IF p_quantidade_por_tipo < 1 THEN
         RAISE EXCEPTION
@@ -107,6 +112,7 @@ BEGIN
 
                 INSERT INTO tcc_pld.transacao (
                     codigo_sintetico,
+                    base_id,
                     conta_id,
                     instante_evento,
                     direcao,
@@ -114,6 +120,7 @@ BEGIN
                 )
                 SELECT
                     v_codigo || '_A_TX_' || evento,
+                    v_base_id,
                     v_conta_a,
                     v_inicio_cenario
                         + (evento - 1) * interval '1 minute',
@@ -123,6 +130,7 @@ BEGIN
 
                 INSERT INTO tcc_pld.transacao (
                     codigo_sintetico,
+                    base_id,
                     conta_id,
                     instante_evento,
                     direcao,
@@ -130,6 +138,7 @@ BEGIN
                 )
                 SELECT
                     v_codigo || '_B_TX_' || evento,
+                    v_base_id,
                     v_conta_b,
                     v_inicio_cenario
                         + (evento - 1) * interval '1 minute',
@@ -140,6 +149,7 @@ BEGIN
             ELSIF v_tipo = 'ABAIXO_LIMIAR' THEN
                 INSERT INTO tcc_pld.transacao (
                     codigo_sintetico,
+                    base_id,
                     conta_id,
                     instante_evento,
                     direcao,
@@ -147,6 +157,7 @@ BEGIN
                 )
                 SELECT
                     v_codigo || '_TX_' || evento,
+                    v_base_id,
                     v_conta_a,
                     v_inicio_cenario
                         + (evento - 1) * interval '1 minute',
@@ -157,6 +168,7 @@ BEGIN
             ELSIF v_tipo = 'FORA_JANELA' THEN
                 INSERT INTO tcc_pld.transacao (
                     codigo_sintetico,
+                    base_id,
                     conta_id,
                     instante_evento,
                     direcao,
@@ -164,6 +176,7 @@ BEGIN
                 )
                 SELECT
                     v_codigo || '_TX_' || evento,
+                    v_base_id,
                     v_conta_a,
                     v_inicio_cenario
                         + (evento - 1) * interval '3 minutes',
@@ -174,6 +187,7 @@ BEGIN
             ELSE
                 INSERT INTO tcc_pld.transacao (
                     codigo_sintetico,
+                    base_id,
                     conta_id,
                     instante_evento,
                     direcao,
@@ -181,6 +195,7 @@ BEGIN
                 )
                 SELECT
                     v_codigo || '_TX_' || evento,
+                    v_base_id,
                     v_conta_a,
                     v_inicio_cenario
                         + (evento - 1) * interval '1 minute',

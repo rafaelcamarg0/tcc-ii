@@ -69,9 +69,7 @@ BEGIN
                 extract(epoch FROM clock_timestamp() - v_inicio) * 1000;
 
             v_inicio := clock_timestamp();
-            CALL tcc_pld.executar_r01(
-                v_identificador || '_REP_' || v_repeticao
-            );
+            CALL tcc_pld.executar_r01(v_identificador);
             v_r01_ms :=
                 extract(epoch FROM clock_timestamp() - v_inicio) * 1000;
 

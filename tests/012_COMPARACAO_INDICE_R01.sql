@@ -55,9 +55,7 @@ BEGIN
             END IF;
 
             v_inicio := clock_timestamp();
-            CALL tcc_pld.executar_r01(
-                'BENCH_INDICE_' || v_condicao || '_' || v_repeticao
-            );
+            CALL tcc_pld.executar_r01('BENCH_INDICE');
             v_duracao_ms :=
                 extract(epoch FROM clock_timestamp() - v_inicio) * 1000;
 
