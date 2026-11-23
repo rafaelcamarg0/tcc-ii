@@ -1,10 +1,10 @@
-# Benchmark após isolamento por base — 29/09/2026
+**Benchmark após isolamento por base — 29/09/2026**
 
-## Escopo
+**Escopo**
 
 Medições refeitas após o isolamento por base e repetidas depois do reforço das validações e da rastreabilidade das execuções. Houve uma execução de aquecimento descartada e cinco repetições medidas por condição.
 
-## Volume controlado
+**Volume controlado**
 
 | Volume-base | Transações totais | Alertas / evidências | Mediana geração | DP geração | Mediana injeção | DP injeção | Mediana R01 | DP R01 |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
@@ -14,7 +14,7 @@ Medições refeitas após o isolamento por base e repetidas depois do reforço d
 
 Todas as repetições produziram as quantidades esperadas de alertas e evidências.
 
-## Comparação do índice
+**Comparação do índice**
 
 Carga: 10.000 transações de fundo e 100 cenários positivos, totalizando 10.500 transações.
 
@@ -25,7 +25,7 @@ Carga: 10.000 transações de fundo e 100 cenários positivos, totalizando 10.50
 
 Ganho mediano calculado para o índice: **99,63%**. As duas condições mantiveram 100 alertas e 500 evidências.
 
-## Comparação da auditoria
+**Comparação da auditoria**
 
 Carga: 100.000 transações sintéticas.
 
@@ -36,13 +36,13 @@ Carga: 100.000 transações sintéticas.
 
 Sobrecarga mediana calculada para a auditoria: **75,55%**. A condição habilitada registrou 100.000 eventos em todas as repetições; a desabilitada registrou zero.
 
-## Interpretação
+**Interpretação**
 
 Os números substituem, para a versão atual do protótipo, as medições de 28/09/2026. O filtro por base alterou o plano e o custo da R01, sobretudo sem o índice composto. Por isso, não se deve combinar medianas das duas versões em uma mesma comparação.
 
 Os resultados mostram comportamento técnico no notebook de desenvolvimento e não representam desempenho universal. O ganho do índice e a sobrecarga da auditoria dependem da distribuição sintética, do volume, do cache, do hardware e da consulta implementada.
 
-## Verificações adicionais
+**Verificações adicionais**
 
 Após a mudança, passaram:
 

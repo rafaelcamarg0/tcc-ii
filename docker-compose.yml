@@ -1,12 +1,10 @@
+name: tcc_pld_revisao
+
 services:
   postgres:
     image: postgres:17
-    container_name: tcc_pld_postgres
-    restart: unless-stopped
     env_file:
       - .env
-    ports:
-      - "127.0.0.1:5432:5432"
     volumes:
       - tcc_pld_data:/var/lib/postgresql/data
       - ./sql/001_BASE_TCC.sql:/docker-entrypoint-initdb.d/001_BASE_TCC.sql:ro
@@ -18,10 +16,10 @@ services:
       - ./sql:/sql:ro
       - ./tests:/tests:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 2s
       timeout: 5s
-      retries: 10
+      retries: 45
 
 volumes:
   tcc_pld_data:

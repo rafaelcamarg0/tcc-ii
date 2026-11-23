@@ -1,24 +1,10 @@
 @echo off
-setlocal EnableExtensions
-cd /d "%~dp0.."
+setlocal EnableExtensions DisableDelayedExpansion
+cd /d "%~dp0.." || exit /b 1
+call "%~dp0preparar_ambiente.bat"
+if errorlevel 1 goto falha
 
-where docker >nul 2>&1 || goto sem_docker
-if not exist ".env" (
-    copy /Y ".env.example" ".env" >nul
-    echo Arquivo .env criado a partir do exemplo para uso local.
-)
-
-docker info >nul 2>&1 || goto docker_parado
-docker compose up -d || goto falha
-echo Aguardando o PostgreSQL ficar pronto...
-for /L %%I in (1,1,60) do (
-    docker compose exec -T postgres pg_isready -U tcc_app -d tcc_pld >nul 2>&1 && goto testar
-    timeout /t 2 /nobreak >nul
-)
-goto falha
-
-:testar
-echo Atualizando objetos idempotentes do banco...
+echo Atualizando objetos do banco de revisao...
 for %%F in (
     005_GERADOR_BASE_SINTETICA.sql
     015_REGISTRO_FALHA_EXECUCAO.sql
@@ -55,18 +41,7 @@ echo VALIDACAO COMPLETA: TODOS OS TESTES PASSARAM.
 pause
 exit /b 0
 
-:sem_docker
-echo Docker nao foi encontrado. Instale e abra o Docker Desktop.
-pause
-exit /b 1
-
-:docker_parado
-echo Docker Desktop esta instalado, mas nao esta pronto.
-pause
-exit /b 1
-
 :falha
-echo.
 echo A validacao foi interrompida porque uma etapa falhou.
 pause
 exit /b 1

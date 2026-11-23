@@ -1,0 +1,55 @@
+Aguardando o PostgreSQL da copia de revisao...
+ Network tccii_raf_20261121_1934_default Creating 
+ Volume tccii_raf_20261121_1934_tcc_pld_data Creating 
+ Volume tccii_raf_20261121_1934_tcc_pld_data Creating 
+ Network tccii_raf_20261121_1934_default Creating 
+ Volume tccii_raf_20261121_1934_tcc_pld_data Created 
+ Volume tccii_raf_20261121_1934_tcc_pld_data Created 
+ Network tccii_raf_20261121_1934_default Created 
+ Network tccii_raf_20261121_1934_default Created 
+ Container tccii_raf_20261121_1934-postgres-1 Creating 
+ Container tccii_raf_20261121_1934-postgres-1 Created 
+ Container tccii_raf_20261121_1934-postgres-1 Starting 
+ Container tccii_raf_20261121_1934-postgres-1 Started 
+ Container tccii_raf_20261121_1934-postgres-1 Waiting 
+ Container tccii_raf_20261121_1934-postgres-1 Healthy 
+Pager usage is off.
+============================================================
+DEMONSTRACAO DO PROTOTIPO DE AUDITORIA E MONITORAMENTO PLD/FT
+============================================================
+BEGIN
+TRUNCATE TABLE
+
+ETAPA 1 - Gerar 100 transacoes sinteticas reproduziveis
+CALL
+ETAPA 2 - Executar a R01 sobre a base de fundo
+CALL
+ execucao_id | identificador_base | regra_codigo | regra_versao |  estado   |                                                               parametros_utilizados                                                               | alertas_gerados 
+-------------+--------------------+--------------+--------------+-----------+---------------------------------------------------------------------------------------------------------------------------------------------------+-----------------
+           1 | DEMO_ORIENTACAO    | R01          |            1 | CONCLUIDA | {"janela": "00:10:00", "direcao": "SAIDA", "unidade": "CONTA", "limite_inferior": "ABERTO", "limite_superior": "FECHADO", "quantidade_minima": 5} |               0
+(1 row)
+
+
+ETAPA 3 - Injetar um cenario positivo conhecido e reexecutar
+CALL
+CALL
+
+ETAPA 4 - Reconstruir o alerta para revisao humana
+ alerta_id | regra_codigo | regra_versao | identificador_base |            cliente            |              conta              |      transacao_referencia      | quantidade_observada | quantidade_evidencias 
+-----------+--------------+--------------+--------------------+-------------------------------+---------------------------------+--------------------------------+----------------------+-----------------------
+         1 | R01          |            1 | DEMO_ORIENTACAO    | DEMO_ORIENTACAO_R01_POS_1_CLI | DEMO_ORIENTACAO_R01_POS_1_CONTA | DEMO_ORIENTACAO_R01_POS_1_TX_5 |                    5 |                     5
+(1 row)
+
+
+ETAPA 5 - Conferir a trilha automatica de auditoria
+ operacao | registros_auditoria 
+----------+---------------------
+ INSERT   |                 105
+(1 row)
+
+ROLLBACK
+
+DEMONSTRACAO CONCLUIDA. Os dados temporarios foram revertidos.
+
+Demonstracao concluida. Confira o alerta e as evidencias acima.
+Pressione qualquer tecla para continuar. . . 

@@ -1,49 +1,31 @@
-# TCC II — Protótipo de auditoria e monitoramento PLD/FT
+# TCC II
 
-Ambiente técnico do TCC de Rafael de Camargo da Silva.
+Prototipo de auditoria e monitoramento de transações em PostgreSQL.
+Rafael de Camargo da Silva, Ciência da Computação, IFFar Frederico Westphalen.
 
-## Escopo atual
+A R01 conta saídas de uma conta em uma janela de tempo. O alerta guarda as movimentações contadas, com os códigos e os horários.
 
-- PostgreSQL 17 executado em Docker Desktop.
-- Dados exclusivamente sintéticos.
-- Auditoria de INSERT, UPDATE e DELETE em transações.
-- Primeira regra: R01, frequência de saídas em janela temporal.
-- Alertas representam situações para análise, não comprovação de ilícito.
 
-## Subir o ambiente
+## Rodar no Windows
 
-1. Iniciar o Docker Desktop.
-2. Na pasta do projeto, executar: docker compose up -d.
-3. Verificar: docker compose ps.
-4. Testar a base: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/002_TESTE_BASE_TCC.sql.
-5. Testar a R01: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/004_TESTE_R01.sql.
-6. Testar o gerador: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/006_TESTE_GERADOR.sql.
-7. Testar cenários controlados: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/009_TESTE_CENARIOS_CONTROLADOS_R01.sql.
-8. Executar benchmark repetido: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/010_BENCHMARK_REPETIDO_CONTROLADO.sql.
-9. Comparar custo da auditoria: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/011_COMPARACAO_AUDITORIA.sql.
-10. Comparar impacto do índice: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/012_COMPARACAO_INDICE_R01.sql.
-11. Testar cenários negativos: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/014_TESTE_CENARIOS_NEGATIVOS_R01.sql.
-12. Testar registro de falha: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/016_TESTE_REGISTRO_FALHA_R01.sql.
-13. Testar isolamento entre bases: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/018_TESTE_ISOLAMENTO_BASE_R01.sql.
-14. Testar entradas inválidas e rastreabilidade da execução: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/020_TESTE_VALIDACOES_EXECUCAO_R01.sql.
-15. Testar a consulta explicável: docker compose exec -T postgres psql -U tcc_app -d tcc_pld -f /tests/022_TESTE_CONSULTA_ALERTAS.sql.
+Baixe o ZIP pelo botão Code ou clone o repositório. Abra o Docker Desktop com contêineres Linux e rode [demonstrar_prototipo.bat](scripts/demonstrar_prototipo.bat). O primeiro uso pode precisar baixar a imagem postgres:17.
 
-A senha local está em .env, arquivo ignorado pelo Git.
+A primeira execução mostra 100 movimentações e zero alertas. Depois de acrescentar cinco saídas da mesma conta, aparece um alerta com cinco evidências. A auditoria mostra 105 inclusões. No fim, o ROLLBACK desfaz os dados temporários da demo.
 
-## Execucao no Windows
+## Validacao
 
-Use o atalho **Iniciar TCC PLD** na Área de Trabalho. Ele inicia o Docker Desktop quando necessário, aguarda o serviço e executa docker compose up -d.
+Rode [validar_projeto.bat](scripts/validar_projeto.bat). O caso C01 tem quatro saídas e deve terminar sem alerta. O teste 016 força falhas de gravação e confere se o banco desfez os registros parciais.
 
-O atalho chama scripts/iniciar_ambiente.bat, que também pode ser executado diretamente ou por acesso remoto. Para uma apresentação de 3 a 5 minutos, use scripts/demonstrar_prototipo.bat; ele cria uma base sintética temporária, mostra um caso sem alerta, injeta um caso positivo, exibe o alerta explicado e desfaz tudo ao final. Para revisão externa, scripts/validar_projeto.bat executa toda a suíte funcional e scripts/executar_benchmarks.bat repete os três experimentos.
+Se já tiver outra cópia rodando, use um nome de projeto diferente no PowerShell, na pasta do repositório:
 
-## Estrutura
+~~~powershell
+$env:COMPOSE_PROJECT_NAME = "tcc_pld_banca_rafael"
+.\scripts\demonstrar_prototipo.bat
+.\scripts\validar_projeto.bat
+docker compose stop
+~~~
 
-- sql/: esquema e mecanismos do banco.
-- tests/: testes funcionais e cenários sintéticos.
-- docs/: especificações, arquitetura e decisões metodológicas.
+## Registros
 
-## Documentação principal
-
-- [docs/ARQUITETURA_PROTOTIPO.md](docs/ARQUITETURA_PROTOTIPO.md): componentes, modelo de dados, fluxos e lacunas.
-- [docs/R01_ESPECIFICACAO.md](docs/R01_ESPECIFICACAO.md): definição funcional da primeira regra.
-- [docs/PLANO_EXPERIMENTO_R01.md](docs/PLANO_EXPERIMENTO_R01.md): protocolo de avaliação e ameaças à validade.
+[Logs e capturas da validação](resultados/2026-11-21)  
+[Medições de desempenho usadas no artigo](resultados/BENCHMARK_APOS_ISOLAMENTO_2026-09-29.md)

@@ -1,0 +1,61 @@
+Aguardando o PostgreSQL da copia de revisao...
+ Container tccii_raf_20261121_final-postgres-1 Running 
+ Container tccii_raf_20261121_final-postgres-1 Waiting 
+ Container tccii_raf_20261121_final-postgres-1 Healthy 
+Pager usage is off.
+============================================================
+DEMONSTRACAO DO PROTOTIPO DE AUDITORIA E MONITORAMENTO PLD/FT
+============================================================
+BEGIN
+TRUNCATE TABLE
+
+ETAPA 1 - Gerar 100 transacoes sinteticas reproduziveis
+CALL
+ETAPA 2 - Executar a R01 sobre a base de fundo
+CALL
+ execucao |      base       |  estado   | movimentos | alertas 
+----------+-----------------+-----------+------------+---------
+        1 | DEMO_ORIENTACAO | CONCLUIDA |        100 |       0
+(1 row)
+
+DO
+
+ETAPA 3 - Injetar um cenario positivo conhecido e reexecutar
+CALL
+CALL
+
+ETAPA 4 - Reconstruir o alerta para revisao humana
+ execucao | regra | versao |      base       |  estado   | n |    w     
+----------+-------+--------+-----------------+-----------+---+----------
+        2 | R01   |      1 | DEMO_ORIENTACAO | CONCLUIDA | 5 | 00:10:00
+(1 row)
+
+ alerta |              conta              |           referencia           | saidas | evidencias 
+--------+---------------------------------+--------------------------------+--------+------------
+      1 | DEMO_ORIENTACAO_R01_POS_1_CONTA | DEMO_ORIENTACAO_R01_POS_1_TX_5 |      5 |          5
+(1 row)
+
+ETAPA 4b - Movimentos preservados na contagem (hora de Brasilia)
+ alerta |             codigo             |  horario_brasilia   | direcao | valor  
+--------+--------------------------------+---------------------+---------+--------
+      1 | DEMO_ORIENTACAO_R01_POS_1_TX_1 | 2026-01-15 12:00:00 | SAIDA   | 100.00
+      1 | DEMO_ORIENTACAO_R01_POS_1_TX_2 | 2026-01-15 12:01:00 | SAIDA   | 100.00
+      1 | DEMO_ORIENTACAO_R01_POS_1_TX_3 | 2026-01-15 12:02:00 | SAIDA   | 100.00
+      1 | DEMO_ORIENTACAO_R01_POS_1_TX_4 | 2026-01-15 12:03:00 | SAIDA   | 100.00
+      1 | DEMO_ORIENTACAO_R01_POS_1_TX_5 | 2026-01-15 12:04:00 | SAIDA   | 100.00
+(5 rows)
+
+
+ETAPA 5 - Conferir a trilha automatica de auditoria
+ operacao | registros_auditoria 
+----------+---------------------
+ INSERT   |                 105
+(1 row)
+
+DO
+ROLLBACK
+
+DEMONSTRACAO CONCLUIDA. Os dados temporarios foram revertidos.
+
+Demonstracao concluida. Confira o alerta e as evidencias acima.
+Pressione qualquer tecla para continuar. . . 

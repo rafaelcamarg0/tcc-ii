@@ -1,0 +1,3 @@
+# Preserva os bytes dos arquivos conferidos no ensaio do Windows.
+* -text
+*.png binary

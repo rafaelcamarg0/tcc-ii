@@ -66,4 +66,36 @@ BEGIN
 END;
 $$;
 
+-- Interrompe a terceira evidencia depois de o alerta e duas evidencias entrarem
+-- no bloco protegido. A sequencia temporaria permite verificar o ponto atingido.
+CREATE TEMP SEQUENCE ordem_teste_evidencia;
+CREATE FUNCTION pg_temp.interromper_evidencias()
+RETURNS trigger LANGUAGE plpgsql AS $$
+BEGIN
+    IF nextval('pg_temp.ordem_teste_evidencia') = 3 THEN
+        RAISE EXCEPTION 'falha controlada na terceira evidencia';
+    END IF;
+    RETURN NEW;
+END;
+$$;
+CREATE TRIGGER teste_interromper_evidencias
+BEFORE INSERT ON tcc_pld.evidencia_alerta
+FOR EACH ROW EXECUTE FUNCTION pg_temp.interromper_evidencias();
+
+CALL tcc_pld.executar_r01('LEGADO_SEM_BASE');
+DO $$
+BEGIN
+    IF (SELECT last_value FROM pg_temp.ordem_teste_evidencia) <> 3
+       OR (SELECT count(*) FROM tcc_pld.execucao_monitoramento
+           WHERE estado = 'FALHOU' AND erro_codigo = 'P0001'
+             AND erro_mensagem = 'falha controlada na terceira evidencia'
+             AND concluida_em IS NOT NULL) <> 1
+       OR EXISTS (SELECT 1 FROM tcc_pld.alerta)
+       OR EXISTS (SELECT 1 FROM tcc_pld.evidencia_alerta) THEN
+        RAISE EXCEPTION 'Falha no descarte de registros parciais';
+    END IF;
+    RAISE NOTICE 'FALHA NA TERCEIRA EVIDENCIA PASSOU: zero alertas e zero evidencias parciais.';
+END;
+$$;
+
 ROLLBACK;

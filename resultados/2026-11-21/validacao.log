@@ -1,0 +1,203 @@
+Aguardando o PostgreSQL da copia de revisao...
+ Container tccii_raf_20261121_1934-postgres-1 Running 
+ Container tccii_raf_20261121_1934-postgres-1 Waiting 
+ Container tccii_raf_20261121_1934-postgres-1 Healthy 
+Atualizando objetos do banco de revisao...
+CREATE TABLE
+psql:/sql/005_GERADOR_BASE_SINTETICA.sql:14: NOTICE:  relation "base_sintetica" already exists, skipping
+ALTER TABLE
+CREATE PROCEDURE
+COMMENT
+BEGIN
+psql:/sql/015_REGISTRO_FALHA_EXECUCAO.sql:6: NOTICE:  column "erro_codigo" of relation "execucao_monitoramento" already exists, skipping
+psql:/sql/015_REGISTRO_FALHA_EXECUCAO.sql:6: NOTICE:  column "erro_mensagem" of relation "execucao_monitoramento" already exists, skipping
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+COMMIT
+BEGIN
+psql:/sql/017_ISOLAMENTO_BASE_TRANSACAO.sql:5: NOTICE:  column "base_id" of relation "transacao" already exists, skipping
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+COMMIT
+BEGIN
+ALTER TABLE
+psql:/sql/019_RASTREABILIDADE_EXECUCAO.sql:7: NOTICE:  column "regra_codigo" of relation "execucao_monitoramento" already exists, skipping
+psql:/sql/019_RASTREABILIDADE_EXECUCAO.sql:7: NOTICE:  column "regra_versao" of relation "execucao_monitoramento" already exists, skipping
+psql:/sql/019_RASTREABILIDADE_EXECUCAO.sql:7: NOTICE:  column "parametros_utilizados" of relation "execucao_monitoramento" already exists, skipping
+ALTER TABLE
+psql:/sql/019_RASTREABILIDADE_EXECUCAO.sql:10: NOTICE:  constraint "execucao_regra_parametros_check" of relation "execucao_monitoramento" does not exist, skipping
+ALTER TABLE
+DO
+ALTER TABLE
+COMMENT
+COMMIT
+CREATE PROCEDURE
+COMMENT
+CREATE TABLE
+psql:/sql/008_CENARIOS_CONTROLADOS_R01.sql:14: NOTICE:  relation "cenario_r01" already exists, skipping
+ALTER TABLE
+CREATE PROCEDURE
+COMMENT
+COMMENT
+psql:/sql/013_CENARIOS_NEGATIVOS_R01.sql:21: NOTICE:  relation "cenario_negativo_r01" already exists, skipping
+CREATE TABLE
+CREATE PROCEDURE
+COMMENT
+COMMENT
+CREATE VIEW
+COMMENT
+
+Executando 002_TESTE_BASE_TCC.sql...
+BEGIN
+psql:/tests/002_TESTE_BASE_TCC.sql:100: NOTICE:  PASSOU: INSERT, UPDATE, DELETE, snapshots, ator, FK e valor positivo.
+DO
+ROLLBACK
+
+Executando 004_TESTE_R01.sql...
+BEGIN
+CREATE FUNCTION
+CREATE PROCEDURE
+CREATE PROCEDURE
+psql:/tests/004_TESTE_R01.sql:76: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:76: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+psql:/tests/004_TESTE_R01.sql:76: NOTICE:  C01 PASSOU
+DO
+psql:/tests/004_TESTE_R01.sql:100: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:100: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+DO
+psql:/tests/004_TESTE_R01.sql:100: NOTICE:  C02 PASSOU
+psql:/tests/004_TESTE_R01.sql:122: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:122: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+psql:/tests/004_TESTE_R01.sql:122: NOTICE:  C03 PASSOU
+DO
+psql:/tests/004_TESTE_R01.sql:148: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:148: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+psql:/tests/004_TESTE_R01.sql:148: NOTICE:  C04 PASSOU
+DO
+psql:/tests/004_TESTE_R01.sql:174: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:174: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+DO
+psql:/tests/004_TESTE_R01.sql:174: NOTICE:  C05 PASSOU
+psql:/tests/004_TESTE_R01.sql:200: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:200: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+DO
+psql:/tests/004_TESTE_R01.sql:200: NOTICE:  C06 PASSOU
+psql:/tests/004_TESTE_R01.sql:230: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:230: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+psql:/tests/004_TESTE_R01.sql:230: NOTICE:  C07 PASSOU
+DO
+psql:/tests/004_TESTE_R01.sql:251: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:251: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+DO
+psql:/tests/004_TESTE_R01.sql:251: NOTICE:  C08 PASSOU
+psql:/tests/004_TESTE_R01.sql:273: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:273: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+psql:/tests/004_TESTE_R01.sql:273: NOTICE:  C09 PASSOU
+DO
+psql:/tests/004_TESTE_R01.sql:297: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:297: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+psql:/tests/004_TESTE_R01.sql:297: NOTICE:  C10 PASSOU
+DO
+psql:/tests/004_TESTE_R01.sql:325: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:325: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+psql:/tests/004_TESTE_R01.sql:325: NOTICE:  C11 PASSOU
+DO
+psql:/tests/004_TESTE_R01.sql:350: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/004_TESTE_R01.sql:350: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+DO
+psql:/tests/004_TESTE_R01.sql:350: NOTICE:  C12 PASSOU
+ROLLBACK
+
+Executando 006_TESTE_GERADOR.sql...
+BEGIN
+DO
+psql:/tests/006_TESTE_GERADOR.sql:111: NOTICE:  PASSOU: contagens, duplicidade e reproducibilidade. Hash=99a10a4642f09fbd65b1bf6ab63f471b
+ROLLBACK
+
+Executando 009_TESTE_CENARIOS_CONTROLADOS_R01.sql...
+BEGIN
+CALL
+CALL
+psql:/tests/009_TESTE_CENARIOS_CONTROLADOS_R01.sql:29: NOTICE:  BASE NEGATIVA PASSOU: zero alertas
+DO
+CALL
+CALL
+psql:/tests/009_TESTE_CENARIOS_CONTROLADOS_R01.sql:94: NOTICE:  PASSOU: 10 cenarios, 10 detectados, 10 alertas e 50 evidencias.
+DO
+ROLLBACK
+
+Executando 014_TESTE_CENARIOS_NEGATIVOS_R01.sql...
+BEGIN
+TRUNCATE TABLE
+CALL
+CALL
+CALL
+psql:/tests/014_TESTE_CENARIOS_NEGATIVOS_R01.sql:71: NOTICE:  NEGATIVOS ISOLADOS PASSARAM: 20 cenarios de 4 tipos, zero alertas.
+DO
+TRUNCATE TABLE
+CALL
+CALL
+psql:/tests/014_TESTE_CENARIOS_NEGATIVOS_R01.sql:132: NOTICE:  MISTURA PASSOU: 20 negativos, 10 positivos, 10 alertas e 50 evidencias.
+DO
+ROLLBACK
+
+Executando 016_TESTE_REGISTRO_FALHA_R01.sql...
+BEGIN
+psql:/tests/016_TESTE_REGISTRO_FALHA_R01.sql:14: NOTICE:  truncate cascades to table "cenario_r01"
+psql:/tests/016_TESTE_REGISTRO_FALHA_R01.sql:14: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+TRUNCATE TABLE
+INSERT 0 1
+INSERT 0 1
+INSERT 0 5
+CREATE FUNCTION
+CREATE TRIGGER
+CALL
+psql:/tests/016_TESTE_REGISTRO_FALHA_R01.sql:45: WARNING:  Execucao R01/1 falhou [P0001]: falha controlada ao persistir alerta
+DROP TRIGGER
+DO
+psql:/tests/016_TESTE_REGISTRO_FALHA_R01.sql:67: NOTICE:  REGISTRO DE FALHA PASSOU
+ROLLBACK
+
+Executando 018_TESTE_ISOLAMENTO_BASE_R01.sql...
+BEGIN
+TRUNCATE TABLE
+CALL
+CALL
+CALL
+CALL
+CALL
+DO
+CALL
+psql:/tests/018_TESTE_ISOLAMENTO_BASE_R01.sql:65: NOTICE:  ISOLAMENTO DE BASES PASSOU
+DO
+ROLLBACK
+
+Executando 020_TESTE_VALIDACOES_EXECUCAO_R01.sql...
+BEGIN
+TRUNCATE TABLE
+DO
+CALL
+psql:/tests/020_TESTE_VALIDACOES_EXECUCAO_R01.sql:105: NOTICE:  VALIDACOES E RASTREABILIDADE DA EXECUCAO PASSARAM
+DO
+ROLLBACK
+
+Executando 022_TESTE_CONSULTA_ALERTAS.sql...
+BEGIN
+psql:/tests/022_TESTE_CONSULTA_ALERTAS.sql:15: NOTICE:  truncate cascades to table "cenario_negativo_r01"
+TRUNCATE TABLE
+CALL
+CALL
+CALL
+psql:/tests/022_TESTE_CONSULTA_ALERTAS.sql:52: NOTICE:  CONSULTA DE ALERTAS PASSOU: alerta explicavel com 5 evidencias
+DO
+ alerta_id | regra_codigo | regra_versao | identificador_base |           cliente            |             conta              |     transacao_referencia      | quantidade_observada | quantidade_evidencias 
+-----------+--------------+--------------+--------------------+------------------------------+--------------------------------+-------------------------------+----------------------+-----------------------
+         1 | R01          |            1 | TESTE_CONSULTA     | TESTE_CONSULTA_R01_POS_1_CLI | TESTE_CONSULTA_R01_POS_1_CONTA | TESTE_CONSULTA_R01_POS_1_TX_5 |                    5 |                     5
+(1 row)
+
+ROLLBACK
+
+VALIDACAO COMPLETA: TODOS OS TESTES PASSARAM.
+Pressione qualquer tecla para continuar. . . 
